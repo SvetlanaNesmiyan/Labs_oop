@@ -1,0 +1,74 @@
+#include <iostream>
+
+using namespace std;
+
+class Rectangle 
+{ 
+private:
+    double length;
+    double width;  
+
+public:
+    Rectangle() : length(0), width(0) {}
+    Rectangle(double l, double w) : length(l), width(w) {}
+    ~Rectangle() {} 
+    double &
+    operator[](int index) 
+    { 
+        if (index == 0) return length; 
+        else if (index == 1) return width; 
+        else throw "Invalid index"; 
+    }
+
+    void operator()() 
+    { 
+        cout << "Length: " << length << ", Width: " << width << endl;
+    }
+
+    friend istream &operator>>(istream &in, Rectangle &rect) 
+    {
+        cout << "Enter the length and width of the rectangle: ";
+        in >> rect.length >> rect.width;
+        return in;
+    }
+
+    friend ostream &operator<<(ostream &out, const Rectangle &rect) 
+    { 
+        out << "Rectangle: Length = " << rect.length << ", Width = " << rect.width;
+        return out;
+    }
+
+    double area() const 
+    {
+        return length * width;
+    }
+
+    double perimeter() const 
+    {
+        return 2 * (length + width);
+    }
+
+    void setDimensions(double l, double w) 
+    { 
+        length = l;
+        width = w;
+    }
+
+    void display() const 
+    { 
+        cout << "Rectangle: Length = " << length << ", Width = " << width << endl;
+    }
+};
+
+int main() 
+{
+    Rectangle rect;
+    cin >> rect;
+
+    cout << "Area: " << rect.area() << endl; 
+    cout << "Perimeter : " << rect.perimeter() << endl; 
+
+    rect(); 
+
+    return 0;
+}
