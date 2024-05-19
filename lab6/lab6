@@ -1,0 +1,78 @@
+#include <iostream> 
+#include <fstream> 
+#include <string> 
+#include <ctime> 
+
+using namespace std; 
+
+class Cylinder 
+{
+public:
+    static int count; 
+    string objectName; 
+    double height; 
+    double radius; 
+
+    Cylinder(string name, double h, double r) 
+    { 
+        objectName = name; 
+        height = h; 
+        radius = r; 
+        count++; 
+    }
+};
+
+int Cylinder::count = 0; 
+
+class Logger 
+{ 
+public:
+    string log = ""; 
+
+    void addRecord(Cylinder &obj) 
+    { 
+        time_t t = time(0);
+        tm now;
+        localtime_s(&now, &t); 
+        string timeStr =
+                to_string(now.tm_year + 1900) + "." + to_string(now.tm_mon + 1) + "." + to_string(now.tm_mday) + " " +
+                to_string(now.tm_hour) + ":" + to_string(now.tm_min) + ":" +
+                to_string(now.tm_sec); 
+        log += "ClassName: Cylinder\n"; 
+        log += "numberOfEntities: " + to_string(Cylinder::count) + "\n"; 
+        log += "\ttime: " + timeStr + "\n"; 
+        log += "\t" + obj.objectName + "Name: " + obj.objectName + "\n"; 
+        log += "\t\t" + obj.objectName + "Height: " + to_string(obj.height) + "\n";
+        log += "\t\t" + obj.objectName + "Radius: " + to_string(obj.radius) +
+               "\n\n";
+    }
+
+    void saveLog() 
+    { 
+        time_t t = time(0); 
+        tm now;
+        localtime_s(&now, &t); 
+        string fileName = "log_" + to_string(now.tm_year + 1900) + "-" + to_string(now.tm_mon + 1) + "-" +
+                          to_string(now.tm_mday) + "_" + to_string(now.tm_hour) + "-" + to_string(now.tm_min) + "-" +
+                          to_string(now.tm_sec) + ".txt"; 
+        ofstream outFile(fileName); 
+        outFile << log; 
+        outFile.close();
+        cout << "Log file saved!";
+    }
+};
+
+int main() 
+{ 
+    Logger logger; 
+
+    Cylinder c1("Cylinder1", 10.0, 5.0);  
+    logger.addRecord(c1); 
+    logger.saveLog();
+
+    Cylinder c2("Cylinder2", 15.0, 7.5); 
+    logger.addRecord(c2); 
+    logger.saveLog(); 
+
+    return 0; 
+}
