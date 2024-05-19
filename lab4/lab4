@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+class Complex {
+public:
+    double real, imag;
+
+    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
+
+    Complex& operator=(const Complex& c) {
+        real = c.real;
+        imag = c.imag;
+        return *this;
+    }
+
+    friend bool operator<(const Complex& c1, const Complex& c2);
+
+    friend Complex operator/(const Complex& c1, const Complex& c2);
+};
+
+Complex operator++(Complex& c) {
+    ++c.real;
+    ++c.imag;
+    return c;
+}
+
+bool operator<(const Complex& c1, const Complex& c2) {
+    return hypot(c1.real, c1.imag) < hypot(c2.real, c2.imag);
+}
+
+Complex operator/(const Complex& c1, const Complex& c2) {
+    double denom = c2.real * c2.real + c2.imag * c2.imag;
+
+    return Complex((c1.real * c2.real + c1.imag * c2.imag) / denom,
+                   (c1.imag * c2.real - c1.real * c2.imag) / denom);
+}
+
+int main() {
+    Complex c1(3, 4), c2(1, 2);
+    cout << "c1 = " << c1.real << " + " << c1.imag << "i" << endl;
+    cout << "c2 = " << c2.real << " + " << c2.imag << "i" << endl;
+
+    if (c1 < c2)
+        cout << "c1 is less than c2\n";
+    else
+        cout << "c1 is not less than c2\n";
+
+    Complex c3 = c1 / c2; // Ділення c1 на c2
+    cout << "c1 / c2 = " << c3.real << " + " << c3.imag << "i" << endl;
+
+    ++c1;
+    cout << "++c1 = " << c1.real << " + " << c1.imag << "i" << endl;
+
+    c1 = c2;
+    cout << "c1 = c2: c1 = " << c1.real << " + " << c1.imag << "i" << endl;
+
+    return 0;
+}
+ 
